@@ -2,302 +2,177 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AL-MUBIN ULTIMATE | The Complete Islamic Suite</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AL-MUBIN PRO</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="manifest" href="manifest.json">
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js');
-  }
-</script>
-
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;900&display=swap');
         :root { --p: #10b981; --bg: #020617; --card: rgba(255, 255, 255, 0.03); }
-        body { background: var(--bg); color: white; font-family: 'Outfit', sans-serif; overflow-x: hidden; }
+        body { background: var(--bg); color: white; font-family: 'Inter', sans-serif; overflow-x: hidden; }
         .bold-header { font-weight: 900; text-transform: uppercase; letter-spacing: -1px; }
-        .glass { background: var(--card); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); border-radius: 2rem; }
-        .page { display: none; animation: slideUp 0.4s ease-out forwards; }
+        .glass { background: var(--card); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); border-radius: 1.5rem; }
+        .page { display: none; animation: slideUp 0.4s ease-out; }
         .page.active { display: block; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .nav-active { color: var(--p) !important; filter: drop-shadow(0 0 8px var(--p)); }
-        .arabic { font-family: serif; font-size: 2.25rem; line-height: 4.5rem; text-align: right; }
-        .custom-scroll::-webkit-scrollbar { width: 3px; }
-        .custom-scroll::-webkit-scrollbar-thumb { background: var(--p); border-radius: 10px; }
+        .nav-active { color: var(--p) !important; }
+        .active { background: #10b981 !important; color: white !important; }
     </style>
 </head>
 <body class="pb-28">
 
-            <header class="p-6 flex justify-between items-center sticky top-0 z-[60] bg-[#020617]/90 backdrop-blur-md">
-            <div>
-                <h1 class="bold-header text-2xl tracking-widest uppercase">AL-MUBIN <span class="text-emerald-500">PRO</span></h1>
-                <p id="hijri-date" class="text-[10px] text-emerald-500 uppercase tracking-widest">Loading Hijri...</p>
-            </div>
-            <div class="text-right">
-                <button onclick="shareApp()" style="background: #10b981; border: none; color: white; border-radius: 8px; padding: 4px 10px; font-size: 12px; cursor: pointer; font-weight: bold;">Share 📲</button>
-            </div>
-        </header>
-
+    <header class="p-6 flex justify-between items-center sticky top-0 z-[60] bg-[#020617]/90 backdrop-blur-md">
+        <div>
+            <h1 class="bold-header text-2xl tracking-widest">AL-MUBIN <span class="text-emerald-500">PRO</span></h1>
+            <button onclick="shareApp()" style="background: #10b981; border: none; color: white; border-radius: 8px; padding: 4px 10px; font-size: 12px; cursor: pointer; font-weight: bold; margin-top: 5px;">Share 📲</button>
+        </div>
+        <div class="text-right">
+            <p id="top-time" class="bold-header text-xl">00:00</p>
+            <p id="hijri-date" class="text-[10px] text-emerald-500 uppercase tracking-widest">Loading...</p>
+        </div>
     </header>
 
     <main id="home" class="page active px-6">
         <div class="py-12 text-center">
-            <h2 id="main-clock" class="text-8xl bold-header mb-2 tracking-tighter">00:00</h2>
-            <p class="text-emerald-500 font-bold uppercase text-xs tracking-[0.3em]">Isha Prayer • 7:55 PM</p>
+            <h2 id="main-clock" class="text-8xl font-bold mb-2">00:00</h2>
+            <p class="text-emerald-500 font-bold uppercase tracking-widest">Next: Isha Prayer • 7:55 PM</p>
         </div>
 
-        <div class="glass p-8 mb-6 shadow-2xl">
-            <div class="flex justify-between items-center mb-8">
-                <h3 class="bold-header text-xl">Prayer Tracker</h3>
-                <span id="tracker-pct" class="text-emerald-500 font-black text-2xl">0%</span>
+        <div class="glass p-6 mb-8">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="bold-header text-lg">Daily Prayers</h3>
+                <span id="prayer-stats" class="text-emerald-500 text-sm font-bold">0/5</span>
             </div>
-            <div id="prayer-row" class="flex justify-between gap-2"></div>
+            <div class="flex justify-between">
+                <button id="fajr-check" onclick="togglePrayer(this)" class="w-12 h-12 rounded-full border-2 border-emerald-500/20 flex items-center justify-center font-bold transition-all">F</button>
+                <button id="dhuhr-check" onclick="togglePrayer(this)" class="w-12 h-12 rounded-full border-2 border-emerald-500/20 flex items-center justify-center font-bold transition-all">D</button>
+                <button id="asr-check" onclick="togglePrayer(this)" class="w-12 h-12 rounded-full border-2 border-emerald-500/20 flex items-center justify-center font-bold transition-all">A</button>
+                <button id="maghrib-check" onclick="togglePrayer(this)" class="w-12 h-12 rounded-full border-2 border-emerald-500/20 flex items-center justify-center font-bold transition-all">M</button>
+                <button id="isha-check" onclick="togglePrayer(this)" class="w-12 h-12 rounded-full border-2 border-emerald-500/20 flex items-center justify-center font-bold transition-all">I</button>
+            </div>
         </div>
 
-        <div class="grid grid-cols-2 gap-4">
-            <div class="glass p-6 border-l-4 border-emerald-500">
-                <p class="text-[10px] bold-header opacity-40 mb-1">Qibla</p>
-                <h4 class="text-lg bold-header">North West</h4>
-                <p class="text-emerald-500 text-[10px] font-bold">295.4°</p>
-            </div>
-            <div class="glass p-6 border-l-4 border-amber-500">
-                <p class="text-[10px] bold-header opacity-40 mb-1">Last Read</p>
-                <h4 id="last-read" class="text-lg bold-header truncate">Al-Fatiha</h4>
-                <p class="text-amber-500 text-[10px] font-bold">Surah 1</p>
-            </div>
+        <div class="glass p-4 text-center mb-8">
+            <p class="text-gray-400 text-xs uppercase tracking-widest mb-1">Last Read Surah</p>
+            <h4 id="last-read" class="text-emerald-500 font-bold text-lg">NONE</h4>
         </div>
     </main>
 
-    <section id="quran" class="page px-6">
-        <h2 class="bold-header text-5xl mb-6">Quran</h2>
-        <div class="relative mb-6">
-            <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 opacity-30"></i>
-            <input type="text" id="q-search" oninput="searchQuran()" placeholder="Search Surah..." 
-                   class="w-full glass p-5 pl-12 outline-none focus:border-emerald-500 transition font-bold">
+    <main id="tasbeeh" class="page px-6">
+        <div class="glass p-8 text-center mt-10">
+            <p class="text-emerald-500 font-bold uppercase tracking-widest mb-4">Tasbeeh Counter</p>
+            <h2 id="count" class="text-9xl font-bold mb-10">0</h2>
+            <button onclick="increment()" class="w-full py-8 bg-emerald-500 rounded-2xl font-black text-3xl shadow-lg shadow-emerald-500/20 active:scale-95 transition-transform">COUNT</button>
+            <button onclick="resetCounter()" class="mt-8 text-gray-500 uppercase tracking-widest text-xs font-bold">Reset Counter</button>
         </div>
-        <div id="q-list" class="space-y-4 h-[60vh] overflow-y-auto pr-2 custom-scroll"></div>
-    </section>
+    </main>
 
-    <section id="mosque" class="page px-6">
-        <h2 class="bold-header text-4xl mb-6">Masjid Finder</h2>
-        <div class="glass h-64 mb-6 relative overflow-hidden flex items-center justify-center text-center p-8">
-            <i class="fas fa-map-marked-alt text-5xl opacity-10 absolute"></i>
-            <p class="text-xs font-bold opacity-40 italic">Map Engine Active. Pulling nearby Masjid data based on your GPS...</p>
-        </div>
-        <div id="m-list" class="space-y-4">
-            <button onclick="scanMosques()" class="w-full py-4 glass bold-header text-xs text-emerald-500 hover:bg-emerald-500/10 transition">Scan Local Area</button>
-        </div>
-    </section>
-
-    <section id="tools" class="page px-6 text-center">
-        <div class="mb-12">
-            <h2 class="bold-header text-4xl mb-10">Qibla</h2>
-            <div class="relative w-56 h-56 mx-auto">
-                <img id="comp-img" src="https://cdn-icons-png.flaticon.com/512/149/149023.png" class="w-full opacity-20 transition-transform">
-                <i class="fas fa-kaaba absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-5xl text-emerald-500"></i>
+    <main id="quran" class="page px-6">
+        <div class="grid gap-3 mt-4" id="surah-list">
             </div>
+    </main>
+
+    <nav class="fixed bottom-0 left-0 right-0 bg-[#020617]/95 backdrop-blur-xl border-t border-white/5 p-4 z-[100]">
+        <div class="flex justify-around items-center max-w-md mx-auto">
+            <button onclick="showPage('home')" class="nav-btn nav-active flex flex-col items-center gap-1">
+                <i class="fa-solid fa-house text-xl"></i><span class="text-[10px] font-bold">HOME</span>
+            </button>
+            <button onclick="showPage('quran')" class="nav-btn flex flex-col items-center gap-1 text-gray-500">
+                <i class="fa-solid fa-book-quran text-xl"></i><span class="text-[10px] font-bold">QURAN</span>
+            </button>
+            <button onclick="showPage('tasbeeh')" class="nav-btn flex flex-col items-center gap-1 text-gray-500">
+                <i class="fa-solid fa-circle-dot text-xl"></i><span class="text-[10px] font-bold">DHIKR</span>
+            </button>
         </div>
-        <hr class="opacity-10 mb-12">
-        <h2 class="bold-header text-4xl mb-8">Tasbih</h2>
-        <div onclick="countT()" class="w-48 h-48 glass rounded-full mx-auto flex flex-col items-center justify-center cursor-pointer active:scale-90 transition border-4 border-emerald-500/20">
-            <span id="t-num" class="text-7xl bold-header">0</span>
-            <p class="text-[10px] bold-header opacity-30">TAP TO DHIKR</p>
-        </div>
-        <button onclick="resetT()" class="mt-6 text-[10px] bold-header opacity-30 hover:opacity-100">Reset Counter</button>
-    </section>
-
-    <div id="reader" class="fixed inset-0 bg-[#020617] z-[100] hidden overflow-y-auto p-6">
-        <div class="max-w-2xl mx-auto">
-            <div class="flex justify-between items-center sticky top-0 bg-[#020617]/95 py-6 z-10 border-b border-white/5">
-                <button onclick="closeR()" class="bold-header text-emerald-500">← Exit</button>
-                <h3 id="r-title" class="bold-header text-xl">Surah</h3>
-                <div class="w-10"></div>
-            </div>
-
-            <div class="glass p-5 my-8 flex items-center justify-between border-emerald-500/30">
-                <div class="flex items-center gap-4">
-                    <button onclick="toggleAudio()" id="play-btn" class="w-12 h-12 bg-emerald-500 rounded-full text-bg-deep flex items-center justify-center shadow-lg active:scale-90">
-                        <i class="fas fa-play"></i>
-                    </button>
-                    <div>
-                        <p class="text-[10px] bold-header opacity-50">AUDIO RECITATION</p>
-                        <p class="text-xs font-bold text-emerald-500">Mishary Rashid Alafasy</p>
-                    </div>
-                </div>
-                <audio id="q-audio" onended="audioEnded()"></audio>
-            </div>
-
-            <div id="r-content" class="space-y-12 pb-32"></div>
-        </div>
-    </div>
-
-    <nav class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[92%] glass p-4 flex justify-around items-center z-[80] border-white/20 shadow-2xl">
-        <button onclick="nav('home')" class="n-item nav-active flex flex-col items-center"><i class="fas fa-home text-xl"></i><span class="text-[8px] font-black mt-1">HOME</span></button>
-        <button onclick="nav('quran')" class="n-item flex flex-col items-center"><i class="fas fa-book-quran text-xl"></i><span class="text-[8px] font-black mt-1">QURAN</span></button>
-        <button onclick="nav('mosque')" class="n-item flex flex-col items-center"><i class="fas fa-map-pin text-xl"></i><span class="text-[8px] font-black mt-1">FIND</span></button>
-        <button onclick="nav('tools')" class="n-item flex flex-col items-center"><i class="fas fa-compass text-xl"></i><span class="text-[8px] font-black mt-1">TOOLS</span></button>
     </nav>
 
     <script>
-        let s = { t: 0, p: [0,0,0,0,0], qList: [] };
-        const audio = document.getElementById('q-audio');
-
-        function nav(id) {
+        // Pages Navigation
+        function showPage(id) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            document.querySelectorAll('.n-item').forEach(i => i.classList.remove('nav-active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('nav-active'));
             event.currentTarget.classList.add('nav-active');
-            window.scrollTo(0,0);
         }
 
-        // Initialize Core
-        function init() {
-            setInterval(() => {
-                let d = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
-                document.getElementById('top-time').innerText = d;
-                document.getElementById('main-clock').innerText = d;
-            }, 1000);
+        // Tasbeeh Logic
+        function increment() {
+            const c = document.getElementById('count');
+            c.innerText = parseInt(c.innerText) + 1;
+        }
+        function resetCounter() { document.getElementById('count').innerText = '0'; }
 
-            const names = ['F','D','A','M','I'];
-            document.getElementById('prayer-row').innerHTML = names.map((n,i) => `
-                <button onclick="setTrack(${i})" id="p-${i}" class="w-12 h-12 glass bold-header flex items-center justify-center border-2 border-transparent transition-all">${n}</button>
-            `).join('');
-            
-            fetchQ();
-            document.getElementById('hijri-date').innerText = "05 Ramadan 1447 AH";
+        // Prayer Tracker Logic
+        function togglePrayer(btn) {
+            btn.classList.toggle('active');
+            updatePrayerStats();
+        }
+        function updatePrayerStats() {
+            const activeCount = document.querySelectorAll('.w-12.active').length;
+            document.getElementById('prayer-stats').innerText = activeCount + '/5';
         }
 
-        function setTrack(i) {
-            s.p[i] = !s.p[i];
-            let b = document.getElementById(`p-${i}`);
-            b.classList.toggle('bg-emerald-500');
-            b.classList.toggle('text-black');
-            b.classList.toggle('border-emerald-500');
-            let pct = Math.round((s.p.filter(x => x).length / 5) * 100);
-            document.getElementById('tracker-pct').innerText = pct + '%';
-            navigator.vibrate?.(40);
-        }
-
-        async function fetchQ() {
-            let res = await fetch('https://api.alquran.cloud/v1/surah');
-            let data = await res.json();
-            s.qList = data.data;
-            renderQ(s.qList);
-        }
-
-        function renderQ(arr) {
-            document.getElementById('q-list').innerHTML = arr.map(x => `
-                <div onclick="openS(${x.number}, '${x.englishName}')" class="glass p-6 flex justify-between items-center cursor-pointer hover:border-emerald-500 transition group">
-                    <div class="flex items-center gap-4">
-                        <span class="text-2xl bold-header opacity-10 group-hover:text-emerald-500 group-hover:opacity-100">${x.number}</span>
-                        <div><h4 class="bold-header text-sm">${x.englishName}</h4><p class="text-[10px] font-bold opacity-40 uppercase">${x.numberOfAyahs} Ayahs</p></div>
-                    </div>
-                    <p class="text-2xl font-bold text-emerald-500">${x.name}</p>
-                </div>
-            `).join('');
-        }
-
-        function searchQuran() {
-            let v = document.getElementById('q-search').value.toLowerCase();
-            renderQ(s.qList.filter(x => x.englishName.toLowerCase().includes(v)));
-        }
-
-        async function openS(id, name) {
-            const r = document.getElementById('reader');
-            const cont = document.getElementById('r-content');
-            r.classList.remove('hidden');
-            document.getElementById('r-title').innerText = name;
-            cont.innerHTML = '<p class="text-center bold-header animate-pulse py-20 opacity-20">FECHING REVELATION...</p>';
-            
-            audio.src = `https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/${id}.mp3`;
-            
-            let [ar, en] = await Promise.all([
-                fetch(`https://api.alquran.cloud/v1/surah/${id}`),
-                fetch(`https://api.alquran.cloud/v1/surah/${id}/en.sahih`)
-            ]);
-            let arD = await ar.json(), enD = await en.json();
-            
-            cont.innerHTML = arD.data.ayahs.map((ay, i) => `
-                <div class="border-b border-white/5 pb-10">
-                    <p class="arabic mb-6">${ay.text}</p>
-                    <p class="text-gray-400 text-sm italic font-light leading-relaxed">${enD.data.ayahs[i].text}</p>
-                </div>
-            `).join('');
-            document.getElementById('last-read').innerText = name;
-        }
-
-        function toggleAudio() {
-            const btn = document.getElementById('play-btn');
-            if(audio.paused) { audio.play(); btn.innerHTML = '<i class="fas fa-pause"></i>'; }
-            else { audio.pause(); btn.innerHTML = '<i class="fas fa-play"></i>'; }
-        }
-
-        function audioEnded() { document.getElementById('play-btn').innerHTML = '<i class="fas fa-play"></i>'; }
-        function closeR() { audio.pause(); audioEnded(); document.getElementById('reader').classList.add('hidden'); }
-
-        function countT() { s.t++; document.getElementById('t-num').innerText = s.t; navigator.vibrate?.(60); }
-        function resetT() { s.t = 0; document.getElementById('t-num').innerText = 0; }
-
-        function scanMosques() {
-            document.getElementById('m-list').innerHTML = `
-                <div class="glass p-6 border-l-4 border-emerald-500"><h4 class="bold-header text-sm">Masjid Al-Noor</h4><p class="text-[10px] opacity-40">0.8 km • Open Now</p></div>
-                <div class="glass p-6"><h4 class="bold-header text-sm">Central Jame Masjid</h4><p class="text-[10px] opacity-40">2.1 km • Open Now</p></div>
-            `;
-        }
-
-        window.addEventListener('deviceorientationabsolute', e => {
-            if(e.alpha) document.getElementById('comp-img').style.transform = `rotate(${-e.alpha}deg)`;
+        // Quran List Generator
+        const surahs = ["Al-Fatihah", "Al-Baqarah", "Al-Imran", "An-Nisa", "Al-Ma'idah", "Al-An'am", "Al-A'raf", "Al-Anfal"];
+        const list = document.getElementById('surah-list');
+        surahs.forEach((name, i) => {
+            const div = document.createElement('div');
+            div.className = "glass p-4 flex justify-between items-center cursor-pointer";
+            div.innerHTML = `<div><span class="text-emerald-500 font-bold mr-3">${i+1}</span><span class="font-bold">${name}</span></div><i class="fa-solid fa-play text-xs text-gray-600"></i>`;
+            div.onclick = () => {
+                document.getElementById('last-read').innerText = name;
+                showPage('home');
+            };
+            list.appendChild(div);
         });
 
-        init();
-          // SAVE & LOAD LOGIC
-    function saveData() {
-    const data = {
-      lastRead: document.getElementById('last-read')?.innerText,
-      dhikr: document.getElementById('count')?.innerText,
-      fajr: document.getElementById('fajr-check')?.classList.contains('active'),
-      dhuhr: document.getElementById('dhuhr-check')?.classList.contains('active'),
-      asr: document.getElementById('asr-check')?.classList.contains('active'),
-      maghrib: document.getElementById('maghrib-check')?.classList.contains('active'),
+        // MEMORY (SAVE & LOAD)
+        function saveData() {
+            const data = {
+                dhikr: document.getElementById('count').innerText,
+                lastRead: document.getElementById('last-read').innerText,
+                fajr: document.getElementById('fajr-check').classList.contains('active'),
+                dhuhr: document.getElementById('dhuhr-check').classList.contains('active'),
+                asr: document.getElementById('asr-check').classList.contains('active'),
+                maghrib: document.getElementById('maghrib-check').classList.contains('active'),
+                isha: document.getElementById('isha-check').classList.contains('active')
+            };
+            localStorage.setItem('alMubinData', JSON.stringify(data));
+        }
+
         function loadData() {
-    const saved = localStorage.getItem('alMubinData');
-    if (saved) {
-      const data = JSON.parse(saved);
-      if(data.lastRead) document.getElementById('last-read').innerText = data.lastRead;
-      if(data.dhikr) document.getElementById('count').innerText = data.dhikr;
-      
-      // Prayer Checkmarks load cheyyaan
-      if(data.fajr) document.getElementById('fajr-check').classList.add('active');
-      if(data.dhuhr) document.getElementById('dhuhr-check').classList.add('active');
-      if(data.asr) document.getElementById('asr-check').classList.add('active');
-      if(data.maghrib) document.getElementById('maghrib-check').classList.add('active');
-      if(data.isha) document.getElementById('isha-check').classList.add('active');
-    }
-  }
+            const saved = localStorage.getItem('alMubinData');
+            if (saved) {
+                const data = JSON.parse(saved);
+                if(data.dhikr) document.getElementById('count').innerText = data.dhikr;
+                if(data.lastRead) document.getElementById('last-read').innerText = data.lastRead;
+                if(data.fajr) { document.getElementById('fajr-check').classList.add('active'); }
+                if(data.dhuhr) { document.getElementById('dhuhr-check').classList.add('active'); }
+                if(data.asr) { document.getElementById('asr-check').classList.add('active'); }
+                if(data.maghrib) { document.getElementById('maghrib-check').classList.add('active'); }
+                if(data.isha) { document.getElementById('isha-check').classList.add('active'); }
+                updatePrayerStats();
+            }
+        }
 
-    const saved = localStorage.getItem('alMubinData');
-    if (saved) {
-      const data = JSON.parse(saved);
-      if(data.lastRead) document.getElementById('last-read').innerText = data.lastRead;
-    }
-  }
+        // Share App
+        function shareApp() {
+            if (navigator.share) {
+                navigator.share({ title: 'AL-MUBIN PRO', text: 'My Islamic Planner App', url: window.location.href });
+            }
+        }
 
-  // Run load on startup
-  loadData();
-setInterval(saveData, 2000);
-  // SHARE FUNCTION
-  function shareApp() {
-    const shareData = {
-      title: 'AL-MUBIN PRO',
-      text: 'Check out this Islamic Prayer Planner app!',
-      url: window.location.href
-    };
-    if (navigator.share) { navigator.share(shareData); }
-    else { window.open(`https://wa.me/?text=${encodeURIComponent(shareData.text + ' ' + shareData.url)}`); }
-  }
+        // Clock & Date
+        setInterval(() => {
+            const d = new Date();
+            const time = d.getHours().toString().padStart(2,'0') + ":" + d.getMinutes().toString().padStart(2,'0');
+            document.getElementById('top-time').innerText = time;
+            document.getElementById('main-clock').innerText = time;
+        }, 1000);
+        document.getElementById('hijri-date').innerText = new Intl.DateTimeFormat('en-u-ca-islamic-uma', {day:'numeric', month:'long', year:'numeric'}).format(new Date());
 
+        // Init
+        loadData();
+        setInterval(saveData, 2000); // Auto-save every 2s
     </script>
 </body>
 </html>
