@@ -1,0 +1,15 @@
+{
+  "name": "AL-MUBIN PRO",
+  "short_name": "Al-Mubin",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#020617",
+  "theme_color": "#10b981",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/149/149023.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
