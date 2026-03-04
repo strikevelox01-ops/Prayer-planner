@@ -243,6 +243,52 @@
         });
 
         init();
+          // 1. SHARE FUNCTION
+  function shareApp() {
+    if (navigator.share) {
+      navigator.share({
+        title: 'AL-MUBIN PRO',
+        text: 'Check out my Islamic Planner App!',
+        url: window.location.href
+      }).catch(console.error);
+    }
+  }
+
+  // 2. SAVE DATA
+  function saveData() {
+    const data = {
+      dhikr: document.getElementById('count')?.innerText || '0',
+      lastRead: document.getElementById('last-read-name')?.innerText || 'None',
+      fajr: document.getElementById('fajr-check')?.classList.contains('active-btn'),
+      dhuhr: document.getElementById('dhuhr-check')?.classList.contains('active-btn'),
+      asr: document.getElementById('asr-check')?.classList.contains('active-btn'),
+      maghrib: document.getElementById('maghrib-check')?.classList.contains('active-btn'),
+      isha: document.getElementById('isha-check')?.classList.contains('active-btn')
+    };
+    localStorage.setItem('alMubinProData', JSON.stringify(data));
+  }
+
+  // 3. LOAD DATA
+  function loadData() {
+    const saved = localStorage.getItem('alMubinProData');
+    if (saved) {
+      const data = JSON.parse(saved);
+      if(data.dhikr) {
+        const c = document.getElementById('count');
+        if(c) c.innerText = data.dhikr;
+      }
+      if(data.fajr) document.getElementById('fajr-check')?.classList.add('active-btn');
+      if(data.dhuhr) document.getElementById('dhuhr-check')?.classList.add('active-btn');
+      if(data.asr) document.getElementById('asr-check')?.classList.add('active-btn');
+      if(data.maghrib) document.getElementById('maghrib-check')?.classList.add('active-btn');
+      if(data.isha) document.getElementById('isha-check')?.classList.add('active-btn');
+    }
+  }
+
+  // 4. START AUTO-SAVE
+  loadData();
+  setInterval(saveData, 2000);
+
     </script>
 </body>
 </html>
