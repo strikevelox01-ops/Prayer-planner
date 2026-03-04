@@ -259,13 +259,22 @@
       dhuhr: document.getElementById('dhuhr-check')?.classList.contains('active'),
       asr: document.getElementById('asr-check')?.classList.contains('active'),
       maghrib: document.getElementById('maghrib-check')?.classList.contains('active'),
-      isha: document.getElementById('isha-check')?.classList.contains('active')
-    };
-    localStorage.setItem('alMubinData', JSON.stringify(data));
+        function loadData() {
+    const saved = localStorage.getItem('alMubinData');
+    if (saved) {
+      const data = JSON.parse(saved);
+      if(data.lastRead) document.getElementById('last-read').innerText = data.lastRead;
+      if(data.dhikr) document.getElementById('count').innerText = data.dhikr;
+      
+      // Prayer Checkmarks load cheyyaan
+      if(data.fajr) document.getElementById('fajr-check').classList.add('active');
+      if(data.dhuhr) document.getElementById('dhuhr-check').classList.add('active');
+      if(data.asr) document.getElementById('asr-check').classList.add('active');
+      if(data.maghrib) document.getElementById('maghrib-check').classList.add('active');
+      if(data.isha) document.getElementById('isha-check').classList.add('active');
+    }
   }
 
-
-  function loadData() {
     const saved = localStorage.getItem('alMubinData');
     if (saved) {
       const data = JSON.parse(saved);
