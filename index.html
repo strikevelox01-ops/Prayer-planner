@@ -251,13 +251,19 @@
 
         init();
           // SAVE & LOAD LOGIC
-  function saveData() {
+    function saveData() {
     const data = {
       lastRead: document.getElementById('last-read')?.innerText,
-      // Add other items here you want to save
+      dhikr: document.getElementById('count')?.innerText,
+      fajr: document.getElementById('fajr-check')?.classList.contains('active'),
+      dhuhr: document.getElementById('dhuhr-check')?.classList.contains('active'),
+      asr: document.getElementById('asr-check')?.classList.contains('active'),
+      maghrib: document.getElementById('maghrib-check')?.classList.contains('active'),
+      isha: document.getElementById('isha-check')?.classList.contains('active')
     };
     localStorage.setItem('alMubinData', JSON.stringify(data));
   }
+
 
   function loadData() {
     const saved = localStorage.getItem('alMubinData');
