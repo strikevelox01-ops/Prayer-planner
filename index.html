@@ -250,6 +250,37 @@
         });
 
         init();
+          // SAVE & LOAD LOGIC
+  function saveData() {
+    const data = {
+      lastRead: document.getElementById('last-read')?.innerText,
+      // Add other items here you want to save
+    };
+    localStorage.setItem('alMubinData', JSON.stringify(data));
+  }
+
+  function loadData() {
+    const saved = localStorage.getItem('alMubinData');
+    if (saved) {
+      const data = JSON.parse(saved);
+      if(data.lastRead) document.getElementById('last-read').innerText = data.lastRead;
+    }
+  }
+
+  // Run load on startup
+  loadData();
+setInterval(saveData, 2000);
+  // SHARE FUNCTION
+  function shareApp() {
+    const shareData = {
+      title: 'AL-MUBIN PRO',
+      text: 'Check out this Islamic Prayer Planner app!',
+      url: window.location.href
+    };
+    if (navigator.share) { navigator.share(shareData); }
+    else { window.open(`https://wa.me/?text=${encodeURIComponent(shareData.text + ' ' + shareData.url)}`); }
+  }
+
     </script>
 </body>
 </html>
